@@ -14,12 +14,18 @@
 -->
   <div class="container">
     <h2>To-Do List</h2>
+    <!-- 자식 컴포넌트에서 설정한 이벤트 이름을 사용 -->
     <TodoSimpleForm @add-todo="addTodo" />
 
     <div v-if="!todos.length">
       추가된 Todo가 없습니다.
     </div>
-    <TodoList :todos="todos" />
+    <!-- :props로 보낼 이름 = "데이터"-->
+    <TodoList 
+      :todos="todos" 
+      @toggle-todo="toggleTodo"
+      @delete-todo="deleteTodo"
+    />
     
   </div>
 </template>
@@ -33,7 +39,7 @@
   export default {
     components : {
       TodoSimpleForm,
-      TodoList
+      TodoList,
     },
     setup() {
       //const toggle = ref(false);
@@ -51,6 +57,9 @@
         todos.value.push(todo);
       }
 
+      const toggleTodo = (index) => {
+        todos.value[index].completed = !todos.value[index].completed;
+      }
     
       /*
       const onToggle = () => {
@@ -61,10 +70,12 @@
           todos.value.splice(index, 1);
       }
 
+
       return {
         todos,
         deleteTodo,
         addTodo,
+        toggleTodo,
       }
 
     }

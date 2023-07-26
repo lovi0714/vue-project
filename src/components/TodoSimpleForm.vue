@@ -29,7 +29,8 @@
     import { ref } from 'vue';
 
     export default {
-        setup(props, context) {
+        emits: ['add-todo'],
+        setup(props, { emit }) {
             const todo = ref('');
             const hasError = ref(false);
 
@@ -37,7 +38,12 @@
                 if (todo.value === ''){
                     hasError.value = true;
                 } else {
-                    context.emit('add-todo', {
+                  // todos 배열이 App.vue에 있어서 사용할 수 없음.
+                  // 자식 컴포넌트에서 데이터를 부모 컴포넌트로 올리려면, emit을 사용해준다.
+                  // props, context(자식 -> 부모로 데이터 보낼 때 필요함)를 받아와서 사용
+                  // emit('이벤트 이름', {주고싶은 데이터 이름: 데이터})
+                  
+                    emit('add-todo', {
                         id: Date.now(),
                         subject: todo.value,
                         completed: false,
